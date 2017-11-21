@@ -281,7 +281,7 @@ primitive _SinkConfig
     end
 
 primitive BuildApplication
-  fun from_json(json_str: String, env: Env): Application val ? =>
+  fun from_json(json_str: String, env: Env): (Application val, String) ? =>
     try
       let json_doc: JsonDoc = JsonDoc
       json_doc.parse(json_str)?
@@ -337,7 +337,7 @@ primitive BuildApplication
         pipelines.push(_PipelineInfo(name, source, consume components_map,
           consume partitions_map, consume connections))
       end
-      _build_application(application_name, consume pipelines)?
+      (_build_application(application_name, consume pipelines)?, application_name)
     else
       Debug("Error building application")
       error
